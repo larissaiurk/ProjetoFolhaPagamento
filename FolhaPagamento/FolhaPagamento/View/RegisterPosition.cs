@@ -22,7 +22,7 @@ namespace FolhaPagamento.View
             p.Bonus = Convert.ToDouble(Console.ReadLine());
 
             PositionDAO.RegisterPosition(p);
-            Console.WriteLine(" Cargo cadastrado com sucesso! ");
+            Console.WriteLine("\n Cargo cadastrado com sucesso! ");
         }
     }
 }

@@ -12,15 +12,11 @@ namespace FolhaPagamento.View
     {
         public static void Render()
         {
-
-            if ((EmployeeDAO.ListEmployees() != null) && (!EmployeeDAO.ListEmployees().Any()))
+            Console.WriteLine(" -- LISTA DE FUNCIONÁRIOS -- ");
+            foreach (Employee emplo in EmployeeDAO.ListEmployees())
             {
-                foreach (Employee emplo in EmployeeDAO.ListEmployees())
-                {
-                    Console.WriteLine(emplo.ToString());
-                }
+                Console.WriteLine(emplo.ToString());
             }
-
         }
     }
 }

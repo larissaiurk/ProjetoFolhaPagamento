@@ -20,11 +20,12 @@ namespace FolhaPagamento.View
             e.Name = Console.ReadLine();
             Console.WriteLine("Digite o CPF do funcionário");
             e.CPF = Console.ReadLine();
+            //TODO
             //Console.WriteLine("Digite o data de nascimento do funcionário");
             //e.Birthday = Convert.ToDateTime(Console.ReadLine());
 
             EmployeeDAO.RegisterEmployee(e);
-            Console.WriteLine(" Funcionário cadastrado com sucesso! ");
+            Console.WriteLine("\n Funcionário cadastrado com sucesso! ");
         }
     }
 }

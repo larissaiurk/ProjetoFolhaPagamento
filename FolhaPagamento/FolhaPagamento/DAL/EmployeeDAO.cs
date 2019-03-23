@@ -13,7 +13,7 @@ namespace FolhaPagamento.DAL
 
         public static List<Employee> ListEmployees()
         {
-            return employees;
+            return employees; ;
         }
 
         public static void RegisterEmployee(Employee e)

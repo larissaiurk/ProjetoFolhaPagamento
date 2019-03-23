@@ -22,7 +22,7 @@ namespace FolhaPagamento.Model
         public override string ToString()
         {
 
-            return "Nome: " + Name + "| CPF: " + CPF + "| Data Nascimento: " + Convert.ToString(Birthday);
+            return "\n Nome: " + Name + " | CPF: " + CPF + " | Data Nascimento: " + Convert.ToString(Birthday);
         }
     }
 

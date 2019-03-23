@@ -21,7 +21,7 @@ namespace FolhaPagamento.Model
         public override string ToString()
         {
 
-            return "Nome: " + Description + "| Bônus: " + Bonus;
+            return "\n Nome: " + Description + " | Bônus: " + Bonus;
         }
 
     }
