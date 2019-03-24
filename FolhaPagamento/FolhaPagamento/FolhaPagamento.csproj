@@ -44,22 +44,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\EmployeeDAO.cs" />
+    <Compile Include="DAL\PayrollDAO.cs" />
     <Compile Include="DAL\PositionDAO.cs" />
+    <Compile Include="DAL\SeedsDAO.cs" />
     <Compile Include="Model\Employee.cs" />
+    <Compile Include="Model\Payroll.cs" />
     <Compile Include="Model\Position.cs" />
+    <Compile Include="Utils\Validation.cs" />
     <Compile Include="View\ListEmployees.cs" />
+    <Compile Include="View\ListPayrolls.cs" />
     <Compile Include="View\ListPositions.cs" />
     <Compile Include="View\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\RegisterEmployee.cs" />
+    <Compile Include="View\RegisterPayroll.cs" />
     <Compile Include="View\RegisterPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

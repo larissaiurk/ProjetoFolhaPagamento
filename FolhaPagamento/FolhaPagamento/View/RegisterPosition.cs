@@ -12,7 +12,7 @@ namespace FolhaPagamento.View
     {
         public static void Render()
         {
-            Console.WriteLine(" -- CADASTRO DE CARGO -- ");
+            Console.WriteLine("\n -- CADASTRO DE CARGO -- ");
 
             Position p = new Position();
 
@@ -20,9 +20,17 @@ namespace FolhaPagamento.View
             p.Description = Console.ReadLine();
             Console.WriteLine("Digite o bônus do cargo");
             p.Bonus = Convert.ToDouble(Console.ReadLine());
+            
+            //if everything is validated, register position
+            if (PositionDAO.RegisterPosition(p))
+            {
+                Console.WriteLine("\n Cargo cadastrado com sucesso! ");
+            }
+            else
+            {
+                Console.WriteLine("\n Atenção! Cargo já existente na base de dados! ");
+            }
 
-            PositionDAO.RegisterPosition(p);
-            Console.WriteLine("\n Cargo cadastrado com sucesso! ");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace FolhaPagamento.View
     {
         public static void Render()
         {
-            Console.WriteLine(" -- LISTA DE CARGOS -- ");
+            Console.WriteLine("\n -- LISTA DE CARGOS -- ");
             foreach (Position posi in PositionDAO.ListPositions())
             {
                 Console.WriteLine(posi.ToString());

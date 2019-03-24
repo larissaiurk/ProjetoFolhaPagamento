@@ -16,9 +16,25 @@ namespace FolhaPagamento.DAL
             return employees; ;
         }
 
-        public static void RegisterEmployee(Employee e)
+        public static bool RegisterEmployee(Employee e)
         {
-            employees.Add(e);
+            if (SearchByCpf(e) == null) { 
+                employees.Add(e);
+                return true;
+            }
+            return false;
+        }
+
+        public static Employee SearchByCpf(Employee e)
+        {
+            foreach (var registeredEmployee in employees)
+            {
+                if (e.CPF.Equals(registeredEmployee.CPF))
+                {
+                    return registeredEmployee;
+                }
+            }
+            return null;
         }
 
     }

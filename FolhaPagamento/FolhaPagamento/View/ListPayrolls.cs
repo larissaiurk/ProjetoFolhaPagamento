@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace FolhaPagamento.View
 {
-    class ListEmployees
+    class ListPayrolls
     {
         public static void Render()
         {
-            Console.WriteLine("\n -- LISTA DE FUNCIONÁRIOS -- ");
-            foreach (Employee emplo in EmployeeDAO.ListEmployees())
+            Console.WriteLine("\n -- LISTA DE FOLHAS DE PAGAMENTO -- ");
+            foreach (Payroll pay in PayrollDAO.ListPayrolls())
             {
-                Console.WriteLine(emplo.ToString());
+                Console.WriteLine(pay.ToString());
             }
         }
+        
     }
 }

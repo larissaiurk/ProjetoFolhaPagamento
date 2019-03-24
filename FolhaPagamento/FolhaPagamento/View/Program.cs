@@ -1,4 +1,6 @@
-﻿using FolhaPagamento.View;
+﻿using FolhaPagamento.DAL;
+using FolhaPagamento.Model;
+using FolhaPagamento.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,13 @@ namespace FolhaPagamento
 {
     class Program
     {
+
         static void Main(string[] args)
         {
 
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.ForegroundColor = ConsoleColor.White;
+            SeedsDAO.Add();
 
             int opcao = 0;
             do
@@ -43,10 +47,13 @@ namespace FolhaPagamento
                         RegisterEmployee.Render();
                         break;
                     case 3:
-                        //CadastrarFuncionario.Renderizar();
+                        ListPositions.Render();
+                        ListEmployees.Render();
+                        RegisterPayroll.Render();
+                        ListPayrolls.Render();
                         break;
                     case 4:
-                        //ListarFuncionarios.Renderizar();
+                        SearchPayroll();
                         break;
                     case 5:
                         //CadastrarProduto.Renderizar();
@@ -64,6 +71,27 @@ namespace FolhaPagamento
                 Console.WriteLine("\n Aperte uma tecla para continuar...");
                 Console.ReadKey();
             } while (opcao != 0);
+        }
+
+        public static void SearchPayroll()
+        {
+            Payroll pay = new Payroll();
+            Console.WriteLine("Digite o CPF  do funcionário");
+            pay.Employee.CPF = Console.ReadLine();
+            Console.WriteLine("Digite o mês e ano da folha de pagamento (mm/yyyy)");
+            DateTime dataValida;
+            Console.WriteLine("Digite o mês e o ano da folha de pagamento (mm/yyyy)");
+            String date = Console.ReadLine();
+            date = "01/" + date;
+            if (DateTime.TryParse(date, out dataValida))
+            {
+                pay.PayrollDate = dataValida;
+
+            }
+            else
+            {
+                Console.WriteLine("Atenção! Data inválida");
+            }
         }
     }
 }

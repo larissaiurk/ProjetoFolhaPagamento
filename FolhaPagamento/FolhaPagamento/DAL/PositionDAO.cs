@@ -16,9 +16,27 @@ namespace FolhaPagamento.DAL
             return positions;
         }
 
-        public static void RegisterPosition(Position p)
+        public static bool RegisterPosition(Position p)
         {
-            positions.Add(p);
+            if (SearchByName(p) == null)
+            {
+                positions.Add(p);
+                return true;
+            }
+            return false;
+            
+        }
+        
+        public static Position SearchByName(Position p)
+        {
+            foreach (var registeredPosition in positions)
+            {
+                if (p.Description.Equals(registeredPosition.Description))
+                {
+                    return registeredPosition;
+                }
+            }
+            return null;
         }
     }
 }
