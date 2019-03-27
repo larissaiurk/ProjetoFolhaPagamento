@@ -53,6 +53,7 @@ namespace FolhaPagamento
                         ListPayrolls.Render();
                         break;
                     case 4:
+                        ListPayrolls.Render();
                         SearchPayroll();
                         break;
                     case 5:
@@ -73,20 +74,26 @@ namespace FolhaPagamento
             } while (opcao != 0);
         }
 
+        //O QUE SIGNIFICA STATIC-VOID
+
         public static void SearchPayroll()
         {
+
+            //TA CERTO ISSO SER FEITO AQUI? EU TERIA QUE CRIAR UM DTO A PARTE?
             Payroll pay = new Payroll();
+            Employee emp = new Employee();
             Console.WriteLine("Digite o CPF  do funcionário");
-            pay.Employee.CPF = Console.ReadLine();
+            emp.CPF = Console.ReadLine();
+            pay.Employee = emp;
             Console.WriteLine("Digite o mês e ano da folha de pagamento (mm/yyyy)");
+
             DateTime dataValida;
-            Console.WriteLine("Digite o mês e o ano da folha de pagamento (mm/yyyy)");
             String date = Console.ReadLine();
             date = "01/" + date;
             if (DateTime.TryParse(date, out dataValida))
             {
                 pay.PayrollDate = dataValida;
-
+                ListPayrolls.listByEmployee(pay);
             }
             else
             {

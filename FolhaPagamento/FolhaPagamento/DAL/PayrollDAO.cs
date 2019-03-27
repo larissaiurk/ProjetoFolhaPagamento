@@ -32,7 +32,7 @@ namespace FolhaPagamento.DAL
         {
             foreach (var registeredPayroll in payrolls)
             {
-                if (p.Employee.Equals(registeredPayroll.Employee) && 
+                if (p.Employee.CPF.Equals(registeredPayroll.Employee.CPF) && 
                     p.PayrollDate.Month.Equals(registeredPayroll.PayrollDate.Month) && 
                     p.PayrollDate.Year.Equals(registeredPayroll.PayrollDate.Year))
                 {
