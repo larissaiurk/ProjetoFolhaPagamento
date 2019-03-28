@@ -54,13 +54,13 @@ namespace FolhaPagamento
                         break;
                     case 4:
                         ListPayrolls.Render();
-                        SearchPayroll();
+                        ListPayrolls.ListByEmployee();
                         break;
                     case 5:
-                        //CadastrarProduto.Renderizar();
+                        ListPayrolls.ListByEmployeeHistoricByCpf();
                         break;
                     case 6:
-                        //ListarProdutos.Renderizar();
+                        ListPayrolls.ListByEmployeeHistoricByDate();
                         break;
                     case 0:
                         Console.WriteLine("Saindo...");
@@ -74,31 +74,8 @@ namespace FolhaPagamento
             } while (opcao != 0);
         }
 
-        //O QUE SIGNIFICA STATIC-VOID
-
-        public static void SearchPayroll()
-        {
-
-            //TA CERTO ISSO SER FEITO AQUI? EU TERIA QUE CRIAR UM DTO A PARTE?
-            Payroll pay = new Payroll();
-            Employee emp = new Employee();
-            Console.WriteLine("Digite o CPF  do funcionário");
-            emp.CPF = Console.ReadLine();
-            pay.Employee = emp;
-            Console.WriteLine("Digite o mês e ano da folha de pagamento (mm/yyyy)");
-
-            DateTime dataValida;
-            String date = Console.ReadLine();
-            date = "01/" + date;
-            if (DateTime.TryParse(date, out dataValida))
-            {
-                pay.PayrollDate = dataValida;
-                ListPayrolls.listByEmployee(pay);
-            }
-            else
-            {
-                Console.WriteLine("Atenção! Data inválida");
-            }
-        }
+        //Static - vc só consegue acessar atravez de uma classe 
+        //Diferente do objeto, que é diamico, metodos nunca mudam
+        //Void - retorno de um metodo quando ele nao retorna "nada"
     }
 }

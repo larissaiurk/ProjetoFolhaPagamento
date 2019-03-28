@@ -41,5 +41,32 @@ namespace FolhaPagamento.DAL
             }
             return null;
         }
+
+        public static List<Payroll> Search(String cpf)
+        {
+            List<Payroll> l = new List<Payroll>();
+            foreach (Payroll registeredPayroll in payrolls)
+            {
+                if (registeredPayroll.Employee.CPF.Equals(cpf))
+                {
+                    l.Add(registeredPayroll);
+                }
+            }
+            return l;
+        }
+
+        public static List<Payroll> Search(DateTime date)
+        {
+            List<Payroll> l = new List<Payroll>();
+            foreach (Payroll registeredPayroll in payrolls)
+            {
+                if (registeredPayroll.PayrollDate.Month.Equals(date.Month) &&
+                    registeredPayroll.PayrollDate.Year.Equals(date.Year))
+                {
+                    l.Add(registeredPayroll);
+                }
+            }
+            return l;
+        }
     }
 }

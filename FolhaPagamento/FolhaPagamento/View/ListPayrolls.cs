@@ -1,5 +1,6 @@
 ﻿using FolhaPagamento.DAL;
 using FolhaPagamento.Model;
+using FolhaPagamento.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,82 +20,178 @@ namespace FolhaPagamento.View
             }
         }
         
-        public static void listByEmployee(Payroll pay)
+        public static void ListByEmployee()
         {
-            
-            pay = PayrollDAO.Search(pay);
-            if (pay != null) {
-                Console.WriteLine("\n -- LISTA DE FOLHAS DE PAGAMENTO FUNCIONÁRIO -- ");
-                //Cabeçalho
-                Console.WriteLine(pay.ToString());
-                Console.WriteLine("\n Horas: " + pay.Hours + "\n Valor da Hora: " + pay.Value);
-                Console.WriteLine("\n ---------------------");
+            //create objects
+            Payroll pay = new Payroll();
+            Employee emp = new Employee();
+            Double grossAmount = 0, netAmount = 0, bonus = 0, ir = 0, inss = 0, fgts = 0;
 
-                //Calculos - eu quero dividir isso pra outra classe, eu crio uma validacao? crio um dto de calculos? ou faco tudo aqui mesmo?
-                Double grossAmount=0, netAmount=0, bonus=0, aliquota=0,
-                    ir=0, inss=0, fgts=0, grossAmountBonus=0;
-                //Bonus - ok
-                grossAmount = pay.Hours * pay.Value;
-                bonus = (pay.Position.Bonus / 100) * grossAmount;
-                //Gross Amount - revisar calculo
-                grossAmount += bonus;
+            //read employee cpf
+            Console.WriteLine("Digite o CPF  do funcionário");
+            emp.CPF = Console.ReadLine();
+            //search employee
+            emp = EmployeeDAO.SearchByCpf(emp);
 
-                //calculo IR
-                if (grossAmount >= 1903.99 && grossAmount <= 2826.65)
+            if (emp != null)
+            {
+                //add employee
+                pay.Employee = emp;
+                
+                //read date
+                Console.WriteLine("Digite o mês e ano da folha de pagamento (mm/yyyy)");
+                DateTime dataValida;
+                String date = Console.ReadLine();
+                date = "01/" + date;
+                
+                //validate date
+                if (DateTime.TryParse(date, out dataValida))
                 {
-                    aliquota = grossAmount * 0.075;
-                    ir = aliquota - 142.8;
-                }else if(grossAmount >= 2826.66 && grossAmount <= 3751.05)
-                {
-                    aliquota = grossAmount * 0.15;
-                    ir = aliquota - 354.8;
-                }
-                else if (grossAmount >= 3751.06 && grossAmount <= 4664.68)
-                {
-                    aliquota = grossAmount * 0.225;
-                    ir = aliquota - 636.13;
-                }
-                else if (grossAmount > 4664.68)
-                {
-                    aliquota = grossAmount * 0.275;
-                    ir = aliquota - 869.36;
-                }
+                    pay.PayrollDate = dataValida;
+                    
+                    //search payroll
+                    pay = PayrollDAO.Search(pay);
+                    if (pay != null)
+                    {
+                        //title
+                        Console.WriteLine("\n -- LISTA DE FOLHAS DE PAGAMENTO FUNCIONÁRIO -- ");
+                        
+                        //Header
+                        Console.WriteLine(pay.ToString());
+                        Console.WriteLine("\n Horas: " + pay.Hours + "\n Valor da Hora: " + pay.Value);
 
-                //calculo inss
-                if (grossAmount <= 1693.72)
-                {
-                    inss = grossAmount * 0.08;
-                }
-                else if (grossAmount >= 1693.73 && grossAmount <= 2822.90)
-                {
-                    inss = grossAmount * 0.09;
-                }
-                else if (grossAmount >= 2822.91 && grossAmount <= 5645.8)
-                {
-                    inss = grossAmount * 0.11;
-                }
-                else if (grossAmount >= 5645.81)
-                {
-                    inss = 621.03;
-                }
+                        //Bonus
+                        grossAmount = Calculations.GrossAmount(pay.Hours, pay.Value);
+                        bonus = Calculations.Bonus(pay.Position.Bonus,grossAmount);
+                        //Gross Amount 
+                        //todo: REVER ISSO AQUI
+                        grossAmount += bonus;
 
-                //calculo fgts
-                fgts = grossAmount * 0.08;
+                        //calculo IR
+                        ir = Calculations.Ir(grossAmount);
 
-                //salario liquido
-                netAmount = grossAmount - ir - inss;
+                        //calculo inss
+                        inss = Calculations.Inss(grossAmount);
 
-                Console.Write("\n Bruto: " +Convert.ToString(grossAmount - bonus) + " | Bonus: " + Convert.ToString(bonus) +
-                " | Bruto + Bonus: " + Convert.ToString(grossAmount) + " \n Aliquota: " + Convert.ToString(aliquota) +
-                    " | IR: " + Convert.ToString(ir)+" | INSS: " + Convert.ToString(inss) + " | FGTS: " + Convert.ToString(fgts)+
-                    "\n Líquido: " + Convert.ToString(netAmount));
+                        //calculo fgts
+                        fgts = Calculations.Fgts(grossAmount);
 
+                        //salario liquido
+                        netAmount = Calculations.NetAmount(grossAmount, ir, inss);
+
+                        Console.Write("\n Bruto: " + Convert.ToString(grossAmount - bonus) + " | Bonus: " + Convert.ToString(bonus) +
+                        " | Bruto + Bonus: " + Convert.ToString(grossAmount)  +
+                            " | IR: " + Convert.ToString(ir) + " | INSS: " + Convert.ToString(inss) + " | FGTS: " + Convert.ToString(fgts) +
+                            "\n Líquido: " + Convert.ToString(netAmount));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Atenção! Folha de pagamento não encontrada.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Atenção! Data inválida");
+                }
             }
             else
             {
-                Console.WriteLine("Atenção! Folha de pagamento não encontrada");
+                Console.Write("Antenção! Funcionário não encontrado.");
             }
         }
 
+        public static void ListByEmployeeHistoricByCpf()
+        {
+            List<Payroll> pp = new List<Payroll>();
+            String cpf;
+            //read employee cpf
+            Console.WriteLine("Digite o CPF  do funcionário");
+            cpf = Console.ReadLine();
+            pp = PayrollDAO.Search(cpf);
+
+            pp = (from e in pp
+                  orderby e.PayrollDate
+                  select e).ToList();
+
+            Console.WriteLine("\n -- HISTÓRICO LISTA DE FOLHAS DE PAGAMENTO FUNCIONÁRIO POR FUNCIONÁRIO -- \n");
+            //To Do: totalizar as horas
+            Double total = 0;
+            foreach (var item in pp)
+            {
+                total += ListPayroll(item);
+            }
+
+            Console.WriteLine("\n Total sálarios: "+Convert.ToString(total));
+
+        }
+
+        public static void ListByEmployeeHistoricByDate()
+        {
+            List<Payroll> pp = new List<Payroll>();
+
+            //read date
+            Console.WriteLine("Digite o mês e ano da folha de pagamento (mm/yyyy)");
+            DateTime dataValida;
+            String date = Console.ReadLine();
+            date = "01/" + date;
+            if (DateTime.TryParse(date, out dataValida))
+            {
+                pp = PayrollDAO.Search(dataValida);
+
+                pp = (from e in pp
+                      orderby e.Employee.Name
+                      select e).ToList();
+
+                Console.WriteLine("\n -- HISTÓRICO LISTA DE FOLHAS DE PAGAMENTO FUNCIONÁRIO POR DATA-- \n");
+                //To Do: totalizar as horas
+                Double total = 0;
+                foreach (var item in pp)
+                {
+                    total += ListPayroll(item);
+                }
+                Console.WriteLine("\n Total sálarios: " + Convert.ToString(total));
+            }
+            else
+            {
+                Console.WriteLine("Atenção! Data inválida.");
+            }
+        }
+
+        public static Double ListPayroll(Payroll pay)
+        {
+            Double grossAmount = 0, netAmount = 0, bonus = 0, ir = 0, inss = 0, fgts = 0;
+            //title
+            Console.WriteLine("\n -- LISTA DE FOLHAS DE PAGAMENTO FUNCIONÁRIO -- \n");
+
+            //Header
+            Console.WriteLine(pay.ToString());
+            Console.WriteLine("\n Horas: " + pay.Hours + "\n Valor da Hora: " + pay.Value);
+
+            //Bonus
+            grossAmount = Calculations.GrossAmount(pay.Hours, pay.Value);
+            bonus = Calculations.Bonus(pay.Position.Bonus, grossAmount);
+            //Gross Amount 
+            //todo: REVER ISSO AQUI
+            grossAmount += bonus;
+
+            //calculo IR
+            ir = Calculations.Ir(grossAmount);
+
+            //calculo inss
+            inss = Calculations.Inss(grossAmount);
+
+            //calculo fgts
+            fgts = Calculations.Fgts(grossAmount);
+
+            //salario liquido
+            netAmount = Calculations.NetAmount(grossAmount, ir, inss);
+
+            Console.Write("\n Bruto: " + Convert.ToString(grossAmount - bonus) + " | Bonus: " + Convert.ToString(bonus) +
+            " | Bruto + Bonus: " + Convert.ToString(grossAmount) +
+                " | IR: " + Convert.ToString(ir) + " | INSS: " + Convert.ToString(inss) + " | FGTS: " + Convert.ToString(fgts) +
+                "\n Líquido: " + Convert.ToString(netAmount) + "\n");
+
+            return netAmount;
+        }
     }
 }

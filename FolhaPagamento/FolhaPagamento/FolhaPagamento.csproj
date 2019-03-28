@@ -50,6 +50,7 @@
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\Payroll.cs" />
     <Compile Include="Model\Position.cs" />
+    <Compile Include="Utils\Calculations.cs" />
     <Compile Include="Utils\Validation.cs" />
     <Compile Include="View\ListEmployees.cs" />
     <Compile Include="View\ListPayrolls.cs" />
