@@ -12,6 +12,9 @@ namespace FolhaPagamento
     class Program
     {
 
+        //Projeto Larissa Iurk
+        //github.com/larissaiurk/ProjetoFolhaPagamento
+
         static void Main(string[] args)
         {
 
